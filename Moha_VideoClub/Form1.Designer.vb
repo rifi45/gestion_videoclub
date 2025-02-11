@@ -461,7 +461,7 @@ Partial Class Form1
         AutoScaleDimensions = New SizeF(8F, 20F)
         AutoScaleMode = AutoScaleMode.Font
         BackColor = SystemColors.Control
-        ClientSize = New Size(967, 538)
+        ClientSize = New Size(968, 539)
         Controls.Add(Panel3)
         Controls.Add(Panel12)
         Controls.Add(pnlCrearUsuario)

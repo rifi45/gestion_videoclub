@@ -19,7 +19,8 @@ Public Class Form1
         If TipoInicioSesion = "socio" Then
             If usuario = "socio" And Contrasena = "123" Then
                 'Despues implementar la logica de socio
-                MessageBox.Show("Conectado Correctamente", "Informacion", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                Form2.Show()
+                Me.Hide()
             Else
                 MessageBox.Show("Usuario o Contraseña incorrecto", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End If
@@ -138,5 +139,4 @@ Public Class Form1
     Private Sub lblCrearCuenta_MouseLeave(sender As Object, e As EventArgs) Handles lblCrearCuenta.MouseLeave
         lblCrearCuenta.ForeColor = SystemColors.ControlText
     End Sub
-
 End Class

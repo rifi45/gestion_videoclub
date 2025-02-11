@@ -15,3 +15,5 @@ C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windo
 C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windows\Moha_VideoClub.pdb
 C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windows\Moha_VideoClub.genruntimeconfig.cache
 C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windows\ref\Moha_VideoClub.dll
+C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windows\Moha_VideoClub.sourcelink.json
+C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windows\Moha_VideoClub.Form2.resources
