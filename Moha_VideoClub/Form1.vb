@@ -16,10 +16,15 @@ Public Class Form1
         Dim usuario As String = txtUsuario.Text
         Dim Contrasena As String = txtContrasena.Text
 
+        Form2.Show()
+        limpiar()
+        Me.Hide()
+
         If TipoInicioSesion = "socio" Then
             If usuario = "socio" And Contrasena = "123" Then
                 'Despues implementar la logica de socio
                 Form2.Show()
+                limpiar()
                 Me.Hide()
             Else
                 MessageBox.Show("Usuario o Contraseña incorrecto", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning)
@@ -57,6 +62,8 @@ Public Class Form1
         txtContrasena.Text = ""
         txtCorreoCrear.Text = ""
         txtFechaNacCrear.Text = ""
+        txtUsuario.Text = ""
+        txtContrasena.Text = ""
     End Sub
 
     'Posible refactorizacion del metodo

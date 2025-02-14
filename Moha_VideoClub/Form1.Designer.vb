@@ -126,6 +126,7 @@ Partial Class Form1
         ' btnInicioSesion
         ' 
         btnInicioSesion.BackColor = SystemColors.Control
+        btnInicioSesion.Cursor = Cursors.Hand
         btnInicioSesion.FlatAppearance.BorderColor = SystemColors.Control
         btnInicioSesion.FlatAppearance.BorderSize = 0
         btnInicioSesion.FlatAppearance.MouseDownBackColor = SystemColors.Control
@@ -142,6 +143,7 @@ Partial Class Form1
         ' lblCrearCuenta
         ' 
         lblCrearCuenta.AutoSize = True
+        lblCrearCuenta.Cursor = Cursors.Hand
         lblCrearCuenta.Font = New Font("Georgia", 7.8F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         lblCrearCuenta.ForeColor = SystemColors.Desktop
         lblCrearCuenta.Location = New Point(160, 422)
@@ -269,6 +271,7 @@ Partial Class Form1
         ' btnCrearCuenta
         ' 
         btnCrearCuenta.BackColor = SystemColors.Control
+        btnCrearCuenta.Cursor = Cursors.Hand
         btnCrearCuenta.FlatAppearance.BorderColor = SystemColors.Control
         btnCrearCuenta.FlatAppearance.BorderSize = 0
         btnCrearCuenta.FlatAppearance.MouseDownBackColor = SystemColors.Control

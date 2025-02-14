@@ -16,7 +16,7 @@ Imports System.Reflection
 <Assembly: System.Reflection.AssemblyCompanyAttribute("Moha_VideoClub"),  _
  Assembly: System.Reflection.AssemblyConfigurationAttribute("Debug"),  _
  Assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0"),  _
- Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cd0e0bdcd6ccf333b237271f17f3f821afcc12c9"),  _
+ Assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a78dd37c50bdb162650cb36f164dadbd6f29775a"),  _
  Assembly: System.Reflection.AssemblyProductAttribute("Moha_VideoClub"),  _
  Assembly: System.Reflection.AssemblyTitleAttribute("Moha_VideoClub"),  _
  Assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0"),  _
