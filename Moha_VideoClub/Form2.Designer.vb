@@ -32,8 +32,20 @@ Partial Class Form2
         btnHistorial = New Button()
         btnConsultarPelis = New Button()
         btnCerrarSesion = New Button()
-        btnAtencion = New Button()
+        panelHistorico = New Panel()
+        lblDevueltas = New Label()
+        lblAlquiladas = New Label()
+        Panel4 = New Panel()
+        Label1 = New Label()
+        ListView1 = New ListView()
+        clmNumero = New ColumnHeader()
+        clmPelicuka = New ColumnHeader()
+        clmDirector = New ColumnHeader()
+        clmFechaAlquiler = New ColumnHeader()
+        clmEstado = New ColumnHeader()
+        clmVecesAlquilada = New ColumnHeader()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
+        panelHistorico.SuspendLayout()
         SuspendLayout()
         ' 
         ' Panel1
@@ -57,7 +69,7 @@ Partial Class Form2
         ' lblNombre
         ' 
         lblNombre.AutoSize = True
-        lblNombre.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0)
+        lblNombre.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         lblNombre.Location = New Point(67, 22)
         lblNombre.Name = "lblNombre"
         lblNombre.Size = New Size(107, 19)
@@ -67,7 +79,7 @@ Partial Class Form2
         ' lblUser
         ' 
         lblUser.AutoSize = True
-        lblUser.Font = New Font("Lucida Bright", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0)
+        lblUser.Font = New Font("Lucida Bright", 7.8F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
         lblUser.Location = New Point(67, 53)
         lblUser.Name = "lblUser"
         lblUser.Size = New Size(83, 15)
@@ -85,12 +97,13 @@ Partial Class Form2
         ' btnAlquilar
         ' 
         btnAlquilar.BackColor = SystemColors.Control
+        btnAlquilar.Cursor = Cursors.Hand
         btnAlquilar.FlatAppearance.BorderSize = 0
         btnAlquilar.FlatAppearance.MouseDownBackColor = SystemColors.Control
-        btnAlquilar.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224)
+        btnAlquilar.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
         btnAlquilar.FlatStyle = FlatStyle.Flat
-        btnAlquilar.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0)
-        btnAlquilar.Location = New Point(1, 96)
+        btnAlquilar.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        btnAlquilar.Location = New Point(0, 152)
         btnAlquilar.Name = "btnAlquilar"
         btnAlquilar.Size = New Size(217, 50)
         btnAlquilar.TabIndex = 5
@@ -100,12 +113,13 @@ Partial Class Form2
         ' btnDevolver
         ' 
         btnDevolver.BackColor = SystemColors.Control
+        btnDevolver.Cursor = Cursors.Hand
         btnDevolver.FlatAppearance.BorderSize = 0
         btnDevolver.FlatAppearance.MouseDownBackColor = SystemColors.Control
-        btnDevolver.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224)
+        btnDevolver.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
         btnDevolver.FlatStyle = FlatStyle.Flat
-        btnDevolver.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0)
-        btnDevolver.Location = New Point(0, 152)
+        btnDevolver.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        btnDevolver.Location = New Point(0, 208)
         btnDevolver.Name = "btnDevolver"
         btnDevolver.Size = New Size(217, 50)
         btnDevolver.TabIndex = 6
@@ -115,11 +129,12 @@ Partial Class Form2
         ' btnHistorial
         ' 
         btnHistorial.BackColor = SystemColors.Control
+        btnHistorial.Cursor = Cursors.Hand
         btnHistorial.FlatAppearance.BorderSize = 0
         btnHistorial.FlatAppearance.MouseDownBackColor = SystemColors.Control
-        btnHistorial.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224)
+        btnHistorial.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
         btnHistorial.FlatStyle = FlatStyle.Flat
-        btnHistorial.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0)
+        btnHistorial.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
         btnHistorial.Location = New Point(0, 264)
         btnHistorial.Name = "btnHistorial"
         btnHistorial.Size = New Size(217, 50)
@@ -130,12 +145,13 @@ Partial Class Form2
         ' btnConsultarPelis
         ' 
         btnConsultarPelis.BackColor = SystemColors.Control
+        btnConsultarPelis.Cursor = Cursors.Hand
         btnConsultarPelis.FlatAppearance.BorderSize = 0
         btnConsultarPelis.FlatAppearance.MouseDownBackColor = SystemColors.Control
-        btnConsultarPelis.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224)
+        btnConsultarPelis.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
         btnConsultarPelis.FlatStyle = FlatStyle.Flat
-        btnConsultarPelis.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0)
-        btnConsultarPelis.Location = New Point(0, 208)
+        btnConsultarPelis.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        btnConsultarPelis.Location = New Point(1, 98)
         btnConsultarPelis.Name = "btnConsultarPelis"
         btnConsultarPelis.Size = New Size(217, 50)
         btnConsultarPelis.TabIndex = 7
@@ -145,40 +161,118 @@ Partial Class Form2
         ' btnCerrarSesion
         ' 
         btnCerrarSesion.BackColor = SystemColors.Control
+        btnCerrarSesion.Cursor = Cursors.Hand
         btnCerrarSesion.FlatAppearance.BorderSize = 0
         btnCerrarSesion.FlatAppearance.MouseDownBackColor = SystemColors.Control
-        btnCerrarSesion.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224)
+        btnCerrarSesion.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
         btnCerrarSesion.FlatStyle = FlatStyle.Flat
-        btnCerrarSesion.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0)
-        btnCerrarSesion.Location = New Point(0, 377)
+        btnCerrarSesion.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        btnCerrarSesion.Location = New Point(1, 320)
         btnCerrarSesion.Name = "btnCerrarSesion"
         btnCerrarSesion.Size = New Size(217, 50)
         btnCerrarSesion.TabIndex = 10
         btnCerrarSesion.Text = "Cerrar Sesion"
         btnCerrarSesion.UseVisualStyleBackColor = False
         ' 
-        ' btnAtencion
+        ' panelHistorico
         ' 
-        btnAtencion.BackColor = SystemColors.Control
-        btnAtencion.FlatAppearance.BorderSize = 0
-        btnAtencion.FlatAppearance.MouseDownBackColor = SystemColors.Control
-        btnAtencion.FlatAppearance.MouseOverBackColor = Color.FromArgb(224, 224, 224)
-        btnAtencion.FlatStyle = FlatStyle.Flat
-        btnAtencion.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0)
-        btnAtencion.Location = New Point(0, 321)
-        btnAtencion.Name = "btnAtencion"
-        btnAtencion.Size = New Size(217, 50)
-        btnAtencion.TabIndex = 9
-        btnAtencion.Text = "Atencion"
-        btnAtencion.UseVisualStyleBackColor = False
+        panelHistorico.Controls.Add(lblDevueltas)
+        panelHistorico.Controls.Add(lblAlquiladas)
+        panelHistorico.Controls.Add(Panel4)
+        panelHistorico.Controls.Add(Label1)
+        panelHistorico.Controls.Add(ListView1)
+        panelHistorico.Location = New Point(224, 12)
+        panelHistorico.Name = "panelHistorico"
+        panelHistorico.Size = New Size(744, 527)
+        panelHistorico.TabIndex = 11
+        ' 
+        ' lblDevueltas
+        ' 
+        lblDevueltas.AutoSize = True
+        lblDevueltas.Cursor = Cursors.Hand
+        lblDevueltas.Font = New Font("Georgia", 10.2F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        lblDevueltas.Location = New Point(636, 37)
+        lblDevueltas.Name = "lblDevueltas"
+        lblDevueltas.Size = New Size(83, 20)
+        lblDevueltas.TabIndex = 14
+        lblDevueltas.Text = "Devueltas"
+        ' 
+        ' lblAlquiladas
+        ' 
+        lblAlquiladas.AutoSize = True
+        lblAlquiladas.Cursor = Cursors.Hand
+        lblAlquiladas.Font = New Font("Georgia", 10.2F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        lblAlquiladas.Location = New Point(533, 37)
+        lblAlquiladas.Name = "lblAlquiladas"
+        lblAlquiladas.Size = New Size(90, 20)
+        lblAlquiladas.TabIndex = 13
+        lblAlquiladas.Text = "Alquiladas"
+        ' 
+        ' Panel4
+        ' 
+        Panel4.BackColor = SystemColors.ActiveCaptionText
+        Panel4.Location = New Point(629, 32)
+        Panel4.Name = "Panel4"
+        Panel4.Size = New Size(1, 25)
+        Panel4.TabIndex = 12
+        ' 
+        ' Label1
+        ' 
+        Label1.AutoSize = True
+        Label1.Font = New Font("Lucida Bright", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label1.Location = New Point(14, 36)
+        Label1.Name = "Label1"
+        Label1.Size = New Size(102, 23)
+        Label1.TabIndex = 1
+        Label1.Text = "Historico"
+        ' 
+        ' ListView1
+        ' 
+        ListView1.Columns.AddRange(New ColumnHeader() {clmNumero, clmPelicuka, clmDirector, clmFechaAlquiler, clmEstado, clmVecesAlquilada})
+        ListView1.Location = New Point(14, 83)
+        ListView1.Name = "ListView1"
+        ListView1.Size = New Size(719, 437)
+        ListView1.TabIndex = 0
+        ListView1.UseCompatibleStateImageBehavior = False
+        ListView1.View = View.Details
+        ' 
+        ' clmNumero
+        ' 
+        clmNumero.Text = "Nº"
+        clmNumero.Width = 30
+        ' 
+        ' clmPelicuka
+        ' 
+        clmPelicuka.Text = "Titulo"
+        clmPelicuka.Width = 150
+        ' 
+        ' clmDirector
+        ' 
+        clmDirector.Text = "Director"
+        clmDirector.Width = 140
+        ' 
+        ' clmFechaAlquiler
+        ' 
+        clmFechaAlquiler.Text = "Fecha Alquiler"
+        clmFechaAlquiler.Width = 110
+        ' 
+        ' clmEstado
+        ' 
+        clmEstado.Text = "Estado"
+        clmEstado.Width = 100
+        ' 
+        ' clmVecesAlquilada
+        ' 
+        clmVecesAlquilada.Text = "Veces Alquilada"
+        clmVecesAlquilada.Width = 100
         ' 
         ' Form2
         ' 
         AutoScaleDimensions = New SizeF(8F, 20F)
         AutoScaleMode = AutoScaleMode.Font
         ClientSize = New Size(969, 539)
+        Controls.Add(panelHistorico)
         Controls.Add(btnCerrarSesion)
-        Controls.Add(btnAtencion)
         Controls.Add(btnHistorial)
         Controls.Add(btnConsultarPelis)
         Controls.Add(btnDevolver)
@@ -191,6 +285,8 @@ Partial Class Form2
         Name = "Form2"
         Text = "Form2"
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
+        panelHistorico.ResumeLayout(False)
+        panelHistorico.PerformLayout()
         ResumeLayout(False)
         PerformLayout()
     End Sub
@@ -207,4 +303,17 @@ Partial Class Form2
     Friend WithEvents btnCerrarSesion As Button
     Friend WithEvents btnAtencion As Button
     Friend WithEvents Panel3 As Panel
+    Friend WithEvents panelHistorico As Panel
+    Friend WithEvents ListView1 As ListView
+    Friend WithEvents Label1 As Label
+    Friend WithEvents lblDevueltas As Label
+    Friend WithEvents lblAlquiladas As Label
+    Friend WithEvents Panel4 As Panel
+    Friend WithEvents clmPelicuka As ColumnHeader
+    Friend WithEvents clmDirector As ColumnHeader
+    Friend WithEvents clmFechaAlquiler As ColumnHeader
+    Friend WithEvents clmNumero As ColumnHeader
+    Friend WithEvents clmId As ColumnHeader
+    Friend WithEvents clmEstado As ColumnHeader
+    Friend WithEvents clmVecesAlquilada As ColumnHeader
 End Class

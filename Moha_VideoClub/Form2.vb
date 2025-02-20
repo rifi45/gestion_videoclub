@@ -1,91 +1,136 @@
-﻿Imports System.Threading
-
-'Falta crear los panels de cada apartado con su logica, obtener datos del primer form y conectarse a la database.
-'Consultar Paso de informacion de un form a otro.
-Public Class Form2
+﻿Public Class Form2
+    Public socioIniciado As Persona
     Dim listaPeliculas As New List(Of Pelicula)
+    Dim peliculasAAlquilar As New List(Of Pelicula)
+    Dim PeliculasAlquiladas As List(Of Pelicula)
     Dim CheckBoxes As New List(Of CheckBox)
     Dim CheckBoxesSeleccionados As Integer
     Dim btnAccion As New Button
-    Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Public Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Me.Text = "Peliculas"
         restablecerColor()
-        PeliculasPrueba()
+        panelHistorico.Hide()
+        lblNombre.Text = socioIniciado.NombreCompleto
+        lblUser.Text = socioIniciado.Usuario
+
+        listaPeliculas = ConexionDB.obtenerPeliculas
     End Sub
-    '------------------------------Back-End-----------------------------------
-    Private Sub PeliculasPrueba()
-        Dim imagenPorDefecto As Image = SystemIcons.Application.ToBitmap()
-
-        ' Agregar 5 películas
-        listaPeliculas.Add(New Pelicula("Inception", imagenPorDefecto, "Christopher Nolan", "2010", "Ciencia Ficción", 148, 5))
-        listaPeliculas.Add(New Pelicula("Titanic", imagenPorDefecto, "James Cameron", "1997", "Romance", 195, 3))
-        listaPeliculas.Add(New Pelicula("Avatar", imagenPorDefecto, "James Cameron", "2009", "Ciencia Ficción", 162, 7))
-        listaPeliculas.Add(New Pelicula("El Padrino", imagenPorDefecto, "Francis Ford Coppola", "1972", "Crimen", 175, 4))
-        listaPeliculas.Add(New Pelicula("Interstellar", imagenPorDefecto, "Christopher Nolan", "2014", "Ciencia Ficción", 169, 6))
-    End Sub
-
-    '------------------------------Front-End-----------------------------------
-    'metodo para restablecer los colores de button
-    Private Sub restablecerColor()
-        btnAlquilar.BackColor = SystemColors.Control
-        btnConsultarPelis.BackColor = SystemColors.Control
-        btnDevolver.BackColor = SystemColors.Control
-        btnHistorial.BackColor = SystemColors.Control
-        btnAtencion.BackColor = SystemColors.Control
-        btnCerrarSesion.BackColor = SystemColors.Control
-    End Sub
-
-    '-----------------------------------Button-Events------------------------------------------
-
+    'Click Alquilar peliculas
     Private Sub btnAlquilar_Click(sender As Object, e As EventArgs) Handles btnAlquilar.Click
-        Panels.limpiar()
-        restablecerColor()
-        btnAlquilar.BackColor = Color.FromArgb(224, 224, 224)
-
-        Panels.panelPrincipal(Me, "Alquilar")
-        Panels.anadirLinearPanel()
-
-        Panels.anadirPanelListaPeliculas(listaPeliculas, "Alquilar")
-
+        peliculasAAlquilar = ConexionDB.obtenerPeliculasNoAlquiladas(socioIniciado.Id)
+        fijarBtnColor(btnAlquilar)
+        iniciarPanel(peliculasAAlquilar, "Alquilar")
     End Sub
 
+    'Click devolver peliculas
     Private Sub btnDevolver_Click(sender As Object, e As EventArgs) Handles btnDevolver.Click
-        Panels.limpiar()
-        restablecerColor()
-        btnDevolver.BackColor = Color.FromArgb(224, 224, 224)
-
-        Panels.panelPrincipal(Me, "Devolver")
-        Panels.anadirLinearPanel()
-
-        Panels.anadirPanelListaPeliculas(listaPeliculas, "Devolver")
+        PeliculasAlquiladas = ConexionDB.obtenerPeliculasAlquiladas(socioIniciado.Id)
+        fijarBtnColor(btnDevolver)
+        iniciarPanel(PeliculasAlquiladas, "Devolver")
     End Sub
 
+    'Click consultar Peliculas
     Private Sub btnConsultarPelis_Click(sender As Object, e As EventArgs) Handles btnConsultarPelis.Click
-        Panels.limpiar()
-        restablecerColor()
-        btnConsultarPelis.BackColor = Color.FromArgb(224, 224, 224)
-
-        Panels.panelPrincipal(Me, "Peliculas")
-        Panels.anadirLinearPanel()
-
-        Panels.anadirPanelListaPeliculas(listaPeliculas, "Peliculas")
+        fijarBtnColor(btnConsultarPelis)
+        iniciarPanel(listaPeliculas, "Peliculas")
     End Sub
 
     Private Sub btnHistorial_Click(sender As Object, e As EventArgs) Handles btnHistorial.Click
-        restablecerColor()
-        btnHistorial.BackColor = Color.FromArgb(224, 224, 224)
+        ActualizarHistorial("Historico")
     End Sub
 
-    Private Sub btnAtencion_Click(sender As Object, e As EventArgs) Handles btnAtencion.Click
-        restablecerColor()
-        btnAtencion.BackColor = Color.FromArgb(224, 224, 224)
-    End Sub
-
+    'Click para Cerrar Sesion
     Private Sub btnCerrarSesion_Click(sender As Object, e As EventArgs) Handles btnCerrarSesion.Click
-        restablecerColor()
-        btnCerrarSesion.BackColor = Color.FromArgb(224, 224, 224)
-        Thread.Sleep(100)
+        fijarBtnColor(btnCerrarSesion)
+        Panels.limpiar()
+
         Form1.Show()
-        restablecerColor()
         Me.Hide()
+    End Sub
+
+    Private Sub lblAlquiladas_Click(sender As Object, e As EventArgs) Handles lblAlquiladas.Click
+        ActualizarHistorial("Alquilada")
+    End Sub
+
+    Private Sub lblDevueltas_Click(sender As Object, e As EventArgs) Handles lblDevueltas.Click
+        ActualizarHistorial("Devuelta")
+    End Sub
+
+    'Metodo para iniciar el listView de historico
+    Private Sub ActualizarHistorial(alquilerEstado As String)
+        establecerColoresHistorico(alquilerEstado)
+        Dim alquileres As New List(Of Alquiler)
+        Dim Contador As Integer = 0
+
+        ListView1.Items.Clear()
+
+        alquileres = ConexionDB.obtenerAlquileres(socioIniciado.Id)
+
+        If alquileres IsNot Nothing AndAlso alquileres.Count > 0 Then
+            For Each alquiler In alquileres
+                Dim peli As Pelicula = devolverPeliculaId(alquiler.IdPelicula)
+
+                If peli IsNot Nothing AndAlso (alquiler.Estado = alquilerEstado Or alquilerEstado = "Historico") Then
+                    Dim item As New ListViewItem((Contador + 1).ToString())
+                    item.SubItems.Add(peli.Nombre)
+                    item.SubItems.Add(peli.Director)
+                    item.SubItems.Add(alquiler.FechaAlquiler)
+                    item.SubItems.Add(alquiler.Estado)
+                    item.SubItems.Add(alquiler.vecesAlquilada)
+                    ListView1.Items.Add(item)
+
+                    Contador += 1
+                End If
+            Next
+        Else
+            MessageBox.Show("No se encontraron alquileres para este socio.")
+        End If
+    End Sub
+    'Metodo para devolver una pelicula por su ID
+    Private Function devolverPeliculaId(Id_pelicula As Integer) As Pelicula
+        Dim pelicula As Pelicula = Nothing
+
+        For Each peliculaLista In listaPeliculas
+            If peliculaLista.Id = Id_pelicula Then
+                pelicula = peliculaLista
+                Exit For
+            End If
+        Next
+
+        Return pelicula
+    End Function
+    ' metodo para fijar color en un boton
+    Private Sub fijarBtnColor(btn As Button)
+        panelHistorico.Hide()
+        restablecerColor()
+        btn.BackColor = Color.FromArgb(224, 224, 224)
+    End Sub
+    ' metodo para iniciar los paneles
+    Private Sub iniciarPanel(listaPeliculas As List(Of Pelicula), accion As String)
+        Panels.limpiar()
+        Panels.panelPrincipal(Me, accion)
+        Panels.anadirLinearPanel()
+        Panels.anadirPanelListaPeliculas(listaPeliculas, accion)
+    End Sub
+    ' metodo para organizar los colores de el boton historico
+    Private Sub establecerColoresHistorico(alquilerEstado As String)
+        lblAlquiladas.ForeColor = If(alquilerEstado = "Alquilada", SystemColors.Highlight, SystemColors.ControlText)
+        lblDevueltas.ForeColor = If(alquilerEstado = "Devuelta", SystemColors.Highlight, SystemColors.ControlText)
+        If alquilerEstado = "Historico" Then
+            restablecerColor()
+            btnHistorial.BackColor = Color.FromArgb(224, 224, 224)
+            panelHistorico.Show()
+            lblAlquiladas.ForeColor = SystemColors.ControlText
+            lblDevueltas.ForeColor = SystemColors.ControlText
+        End If
+    End Sub
+    ' metodo para restablecer el color de los botones y dejarlo en color inclickable
+    Private Sub restablecerColor()
+        Dim color As Color = SystemColors.Control
+        btnAlquilar.BackColor = color
+        btnConsultarPelis.BackColor = color
+        btnDevolver.BackColor = color
+        btnHistorial.BackColor = color
+        btnCerrarSesion.BackColor = color
     End Sub
 End Class

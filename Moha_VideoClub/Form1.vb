@@ -1,59 +1,137 @@
-﻿'Falta la logica de inicio y creacion de cuenta y conectar con la base de datos para un mejor listado.
+﻿'Falta la creacion de usuario, solamente eroor en la base de datos al insertar consultar mañana.
 
 Public Class Form1
     Dim TipoInicioSesion As String
     Dim TipoCrearUsuario As String
+    Dim listaPersonas As New List(Of Persona)
+    Dim personaIniciada As Persona
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         pnlCrearUsuario.Hide()
         Panel3.Hide()
+
+        ConexionDB.conexionBaseDatosSQLite()
+        listaPersonas = ConexionDB.obtenerUsuarios()
     End Sub
 
-    '-------------------BACK END----------------------
-    ' Parte donde me encargo de la logica del proyecto aunque tambien tiene algunas cosas de front.
-
-    ' Evento para el inicio de sesion
+    ' Parte inicio de sesion y su logica
     Private Sub btnInicioSesion_Click(sender As Object, e As EventArgs) Handles btnInicioSesion.Click
         Dim usuario As String = txtUsuario.Text
-        Dim Contrasena As String = txtContrasena.Text
+        Dim contrasena As String = txtContrasena.Text
 
-        Form2.Show()
-        limpiar()
-        Me.Hide()
+        If String.IsNullOrEmpty(TipoInicioSesion) Then
+            MessageBox.Show("Por favor, seleccione Admin o Socio", "Información", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
 
-        If TipoInicioSesion = "socio" Then
-            If usuario = "socio" And Contrasena = "123" Then
-                'Despues implementar la logica de socio
-                Form2.Show()
-                limpiar()
-                Me.Hide()
-            Else
-                MessageBox.Show("Usuario o Contraseña incorrecto", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            End If
-        ElseIf TipoInicioSesion = "admin" Then
-            'Despues implementar La logica de admin
-            If usuario = "admin" And Contrasena = "123" Then
-                MessageBox.Show("Conectado Correctamente", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            Else
-                MessageBox.Show("Usuario o Contraseña incorrecto", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        If comprobarInicio(usuario, contrasena, TipoInicioSesion) Then
+            If TipoInicioSesion = "socio" Then
+                inicioSocio(usuario, contrasena)
+            ElseIf TipoInicioSesion = "admin" Then
+                inicioAdmin()
             End If
         Else
-            MessageBox.Show("Porfavor Seleccione Admin o Socio", "Informacion", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show("Usuario o Contraseña incorrecto", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
     End Sub
 
-    'Evento para la creacion de una cuenta
+    Private Function comprobarInicio(usuario As String, contrasena As String, tipo As String) As Boolean
+        Dim esAprobado As Boolean = False
+        For Each persona In listaPersonas
+            If (persona.Usuario = usuario And persona.Contrasena = contrasena And persona.Tipo = tipo) Then
+                esAprobado = True
+                personaIniciada = persona
+            End If
+        Next
+        Return esAprobado
+    End Function
+
+    Private Sub inicioSocio(usuario As String, contrasena As String)
+        Form2.socioIniciado = personaIniciada
+        Panels.socioIniciado = personaIniciada.Id
+        Form2.Form2_Load(Nothing, Nothing)
+        Form2.Show()
+        limpiar()
+        Me.Hide()
+    End Sub
+
+    Private Sub inicioAdmin()
+        MessageBox.Show("Conectado Correctamente", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+
+    'Parte creacion de cuenta y su logica
     Private Sub btnCrearCuenta_Click(sender As Object, e As EventArgs) Handles btnCrearCuenta.Click
         If ComprobarDatos() = False Then
             If TipoCrearUsuario = "admin" Or TipoCrearUsuario = "socio" Then
-                pnlCrearUsuario.Hide()
-                limpiar()
-                Panel3.Show()
+                Dim usuarioCreado As Boolean = crearUnUsuario()
+
+                If usuarioCreado Then
+                    MostrarPantallaInicio()
+                    listaPersonas = ConexionDB.obtenerUsuarios()
+                End If
             Else
                 MessageBox.Show("Porfavor Seleccione Admin o Socio", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             End If
         Else
             MessageBox.Show("Porfavor rellene los espacios ROJOS", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
+    End Sub
+
+    Private Function crearUnUsuario() As Boolean
+        Dim nombreCompleto As String = txtNombreCompletoCrear.Text
+        Dim usuario As String = txtUsuarioCrear.Text
+        Dim correo As String = txtCorreoCrear.Text
+        Dim contrasena As String = txtContrasenaCrear.Text
+        Dim fecha As String = txtFechaNacCrear.Text
+        Dim tipo As String = TipoCrearUsuario
+
+        If Not comprobarNombreUsuario(usuario) Then
+            MessageBox.Show("Nombre de usuario existente", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return False
+        End If
+
+        If Not comprobarCorreo(correo) Then
+            MessageBox.Show("Formato Incorrecto, use <sus_datos>@gmail.com", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return False
+        End If
+
+        If Not comprobarFecha(fecha) Then
+            MessageBox.Show("Formato Incorrecto, use <XX/XX/XXXX>", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Return False
+        End If
+
+        Dim persona = New Persona(0, nombreCompleto, usuario, contrasena, correo, fecha, tipo)
+        ConexionDB.crearUsuario(persona)
+
+        Return True
+    End Function
+
+    Private Function comprobarNombreUsuario(usuario As String) As Boolean
+        Dim aprobado As Boolean = True
+        For Each persona In listaPersonas
+            If persona.Usuario = usuario Then
+                aprobado = False
+            End If
+        Next
+
+        Return aprobado
+    End Function
+    Private Function comprobarCorreo(correo As String) As Boolean
+        Dim aprobado = False
+        If correo.Contains("@gmail.com") Then
+            aprobado = True
+        End If
+        Return aprobado
+    End Function
+    Private Function comprobarFecha(fecha As String) As Boolean
+        Dim resultado As DateTime
+        Return DateTime.TryParseExact(fecha, "dd/MM/yyyy", Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, resultado)
+    End Function
+
+    Private Sub MostrarPantallaInicio()
+        pnlCrearUsuario.Hide()
+        panelIniciar.Show()
+        Panel3.Show()
+        limpiar()
     End Sub
 
     Private Sub limpiar()
@@ -66,78 +144,60 @@ Public Class Form1
         txtContrasena.Text = ""
     End Sub
 
-    'Posible refactorizacion del metodo
+    'Funcion para comprobar los si todos los campos de crear usuarios estan rellenos si no pone el color de la label rojo
     Private Function ComprobarDatos() As Boolean
+        Dim controles As New Dictionary(Of TextBox, Label) From {
+        {txtNombreCompletoCrear, Label3},
+        {txtUsuarioCrear, Label5},
+        {txtCorreoCrear, Label4},
+        {txtContrasenaCrear, Label6},
+        {txtFechaNacCrear, Label7}
+    }
+
         Dim noAprobado As Boolean = False
-        If txtNombreCompletoCrear.Text = "" Then
-            Label3.ForeColor = Color.FromArgb(255, 0, 0)
-            noAprobado = True
-        Else
-            Label3.ForeColor = SystemColors.ControlText
-        End If
 
-        If txtUsuarioCrear.Text = "" Then
-            Label5.ForeColor = Color.FromArgb(255, 0, 0)
-            noAprobado = True
-        Else
-            Label5.ForeColor = SystemColors.ControlText
-        End If
-
-        If txtCorreoCrear.Text = "" Then
-            Label4.ForeColor = Color.FromArgb(255, 0, 0)
-            noAprobado = True
-        Else
-            Label4.ForeColor = SystemColors.ControlText
-        End If
-
-        If txtContrasenaCrear.Text = "" Then
-            Label6.ForeColor = Color.FromArgb(255, 0, 0)
-            noAprobado = True
-        Else
-            Label6.ForeColor = SystemColors.ControlText
-        End If
-
-        If txtFechaNacCrear.Text = "" Then
-            Label7.ForeColor = Color.FromArgb(255, 0, 0)
-            noAprobado = True
-        Else
-            Label7.ForeColor = SystemColors.ControlText
-        End If
+        For Each control In controles
+            If control.Key.Text = "" Then
+                control.Value.ForeColor = Color.Red
+                noAprobado = True
+            Else
+                control.Value.ForeColor = SystemColors.ControlText
+            End If
+        Next
 
         Return noAprobado
-
     End Function
 
     '-------------------FRONT END----------------------
     'Parte donde me encargo de cambiar de colores a labels y todo lo que tiene que ver con la interfaz de usuario
     Private Sub lblSocio_Click(sender As Object, e As EventArgs) Handles lblSocio.Click
-        lblSocio.ForeColor = SystemColors.Highlight
-        lblAdmin.ForeColor = SystemColors.ControlText
-        TipoInicioSesion = "socio"
+        elegirRol(lblSocio, lblAdmin, "socio", "iniciar")
     End Sub
-
     Private Sub lblAdmin_Click(sender As Object, e As EventArgs) Handles lblAdmin.Click
-        lblAdmin.ForeColor = SystemColors.Highlight
-        lblSocio.ForeColor = SystemColors.ControlText
-        TipoInicioSesion = "admin"
+        elegirRol(lblAdmin, lblSocio, "admin", "iniciar")
+    End Sub
+    Private Sub lblSocioCrear_Click(sender As Object, e As EventArgs) Handles lblSocioCrear.Click
+        elegirRol(lblSocioCrear, lblAdminCrear, "socio", "crear")
+    End Sub
+    Private Sub lblAdminCrear_Click(sender As Object, e As EventArgs) Handles lblAdminCrear.Click
+        elegirRol(lblAdminCrear, lblSocioCrear, "admin", "crear")
+    End Sub
+    Private Sub elegirRol(lblUno As Label, lblDos As Label, eleccion As String, Accion As String)
+        lblUno.ForeColor = SystemColors.Highlight
+        lblDos.ForeColor = SystemColors.ControlText
+        If Accion = "iniciar" Then
+            TipoInicioSesion = eleccion
+        Else
+            TipoCrearUsuario = eleccion
+        End If
     End Sub
 
     Private Sub lblCrearCuenta_Click(sender As Object, e As EventArgs) Handles lblCrearCuenta.Click
         pnlCrearUsuario.Show()
+        panelIniciar.Hide()
         Panel3.Hide()
     End Sub
 
-    Private Sub lblSocioCrear_Click(sender As Object, e As EventArgs) Handles lblSocioCrear.Click
-        lblSocioCrear.ForeColor = SystemColors.Highlight
-        lblAdminCrear.ForeColor = SystemColors.ControlText
-        TipoCrearUsuario = "socio"
-    End Sub
-
-    Private Sub lblAdminCrear_Click(sender As Object, e As EventArgs) Handles lblAdminCrear.Click
-        lblAdminCrear.ForeColor = SystemColors.Highlight
-        lblSocioCrear.ForeColor = SystemColors.ControlText
-        TipoCrearUsuario = "admin"
-    End Sub
 
     Private Sub lblCrearCuenta_MouseEnter(sender As Object, e As EventArgs) Handles lblCrearCuenta.MouseEnter
         lblCrearCuenta.ForeColor = SystemColors.Highlight
@@ -145,5 +205,18 @@ Public Class Form1
 
     Private Sub lblCrearCuenta_MouseLeave(sender As Object, e As EventArgs) Handles lblCrearCuenta.MouseLeave
         lblCrearCuenta.ForeColor = SystemColors.ControlText
+    End Sub
+
+    Private Sub lblIniciar_MouseEnter(sender As Object, e As EventArgs) Handles lblIniciar.MouseEnter
+        lblIniciar.ForeColor = SystemColors.Highlight
+    End Sub
+
+    Private Sub lblIniciar_MouseLeave(sender As Object, e As EventArgs) Handles lblIniciar.MouseLeave
+        lblIniciar.ForeColor = SystemColors.ControlText
+    End Sub
+
+    Private Sub Label8_Click(sender As Object, e As EventArgs) Handles lblIniciar.Click
+        pnlCrearUsuario.Hide()
+        panelIniciar.Show()
     End Sub
 End Class
