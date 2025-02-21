@@ -39,3 +39,4 @@ C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windo
 C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windows\AxInterop.WMPLib.dll
 C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windows\Moha_VideoClub.vbproj.ResolveComReference.cache
 C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windows\Moha_VideoClub.Form3.resources
+C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windows\Moha_VideoClub.UIAdministrador.resources

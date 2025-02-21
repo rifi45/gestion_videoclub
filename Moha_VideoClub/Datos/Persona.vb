@@ -8,14 +8,13 @@
     Private _tipo As String
 
     ' Constructor
-    Public Sub New(id As Integer, nombreCompleto As String, usuario As String, contrasena As String, correo As String, fechaNacimiento As String, tipo As String)
+    Public Sub New(id As Integer, nombreCompleto As String, usuario As String, contrasena As String, correo As String, fechaNacimiento As String)
         Me._id = id
         Me._nombreCompleto = nombreCompleto
         Me._usuario = usuario
         Me._contrasena = contrasena
         Me._correo = correo
         Me._fechaNacimiento = fechaNacimiento
-        Me._tipo = tipo
     End Sub
 
     ' Getters y Setters
@@ -70,15 +69,6 @@
         End Get
         Set(value As String)
             _fechaNacimiento = value
-        End Set
-    End Property
-
-    Public Property Tipo As String
-        Get
-            Return _tipo
-        End Get
-        Set(value As String)
-            _tipo = value
         End Set
     End Property
 End Class

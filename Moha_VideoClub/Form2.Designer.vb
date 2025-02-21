@@ -80,6 +80,7 @@ Partial Class Form2
         ' 
         lblUser.AutoSize = True
         lblUser.Font = New Font("Lucida Bright", 7.8F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
+        lblUser.ForeColor = SystemColors.ControlText
         lblUser.Location = New Point(67, 53)
         lblUser.Name = "lblUser"
         lblUser.Size = New Size(83, 15)
@@ -103,6 +104,7 @@ Partial Class Form2
         btnAlquilar.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
         btnAlquilar.FlatStyle = FlatStyle.Flat
         btnAlquilar.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        btnAlquilar.ForeColor = SystemColors.Highlight
         btnAlquilar.Location = New Point(0, 152)
         btnAlquilar.Name = "btnAlquilar"
         btnAlquilar.Size = New Size(217, 50)
@@ -119,6 +121,7 @@ Partial Class Form2
         btnDevolver.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
         btnDevolver.FlatStyle = FlatStyle.Flat
         btnDevolver.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        btnDevolver.ForeColor = SystemColors.Highlight
         btnDevolver.Location = New Point(0, 208)
         btnDevolver.Name = "btnDevolver"
         btnDevolver.Size = New Size(217, 50)
@@ -135,6 +138,7 @@ Partial Class Form2
         btnHistorial.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
         btnHistorial.FlatStyle = FlatStyle.Flat
         btnHistorial.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        btnHistorial.ForeColor = SystemColors.Highlight
         btnHistorial.Location = New Point(0, 264)
         btnHistorial.Name = "btnHistorial"
         btnHistorial.Size = New Size(217, 50)
@@ -151,6 +155,7 @@ Partial Class Form2
         btnConsultarPelis.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
         btnConsultarPelis.FlatStyle = FlatStyle.Flat
         btnConsultarPelis.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        btnConsultarPelis.ForeColor = SystemColors.Highlight
         btnConsultarPelis.Location = New Point(1, 98)
         btnConsultarPelis.Name = "btnConsultarPelis"
         btnConsultarPelis.Size = New Size(217, 50)
@@ -167,6 +172,7 @@ Partial Class Form2
         btnCerrarSesion.FlatAppearance.MouseOverBackColor = Color.FromArgb(CByte(224), CByte(224), CByte(224))
         btnCerrarSesion.FlatStyle = FlatStyle.Flat
         btnCerrarSesion.Font = New Font("Lucida Bright", 10.2F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        btnCerrarSesion.ForeColor = SystemColors.Highlight
         btnCerrarSesion.Location = New Point(1, 320)
         btnCerrarSesion.Name = "btnCerrarSesion"
         btnCerrarSesion.Size = New Size(217, 50)
@@ -220,6 +226,7 @@ Partial Class Form2
         ' 
         Label1.AutoSize = True
         Label1.Font = New Font("Lucida Bright", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label1.ForeColor = SystemColors.Highlight
         Label1.Location = New Point(14, 36)
         Label1.Name = "Label1"
         Label1.Size = New Size(102, 23)

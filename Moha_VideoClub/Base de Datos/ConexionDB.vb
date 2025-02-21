@@ -1,7 +1,7 @@
 ﻿Imports System.Data.SQLite
 Imports System.IO
 Module ConexionDB
-    Dim nombreBaseDatos As String = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\mohap\OneDrive\Documentos\2ºDAM\DesInt\moha_gestion_peliculas.db"
+    Dim nombreBaseDatos As String = "Data Source=C:\Users\mohap\OneDrive\Documentos\2ºDAM\DesInt\moha_gestion_peliculas.db;Version=3;"
     Public Conexion As SQLiteConnection
     Sub conexionBaseDatosSQLite()
         Try
@@ -15,7 +15,6 @@ Module ConexionDB
         Try
             If Conexion.State = ConnectionState.Open Then
                 Conexion.Close()
-                MsgBox("Conexión cerrada correctamente.")
 
             End If
         Catch ex As Exception
@@ -29,8 +28,8 @@ Module ConexionDB
         Try
             Dim consulta As String = "SELECT * FROM pelicula"
 
-            Using adaptador As New SQLiteDataAdapter(consulta, ConexionDB.Conexion)
-                Dim dt As New DataTable()
+            Dim adaptador As New SQLiteDataAdapter(consulta, ConexionDB.Conexion)
+            Dim dt As New DataTable()
                 adaptador.Fill(dt)
 
 
@@ -48,8 +47,7 @@ Module ConexionDB
                     peli.Trailer = fila("video").ToString
                     listaPeliculas.Add(peli)
                 Next
-            End Using
-            Return listaPeliculas
+                Return listaPeliculas
         Catch ex As Exception
             MsgBox("Error al consultar películas: " & ex.Message)
             Return Nothing
@@ -62,8 +60,8 @@ Module ConexionDB
         listaAlquileres.Clear()
 
         Try
-            Using adaptador As New SQLiteDataAdapter(consulta, ConexionDB.Conexion)
-                adaptador.SelectCommand.Parameters.AddWithValue("@id_usuario", id)
+            Dim adaptador As New SQLiteDataAdapter(consulta, ConexionDB.Conexion)
+            adaptador.SelectCommand.Parameters.AddWithValue("@id_usuario", id)
                 Dim dt As New DataTable()
                 adaptador.Fill(dt)
 
@@ -77,8 +75,7 @@ Module ConexionDB
                         Convert.ToInt32(fila("veces_alquilada")))
                     listaAlquileres.Add(alquiler)
                 Next
-            End Using
-            Return listaAlquileres
+                Return listaAlquileres
         Catch ex As Exception
             MsgBox("Error al consultar clientes: " & ex.Message)
             Return Nothing
@@ -89,23 +86,32 @@ Module ConexionDB
         Dim consulta As String = "SELECT * FROM persona"
 
         Try
-            Using adaptador As New SQLiteDataAdapter(consulta, ConexionDB.Conexion)
-                Dim dt As New DataTable()
+            Dim adaptador As New SQLiteDataAdapter(consulta, ConexionDB.Conexion)
+            Dim dt As New DataTable()
                 adaptador.Fill(dt)
 
                 For Each fila As DataRow In dt.Rows
-                    Dim persona As New Persona(
+                    If fila("tipo").ToString() = "socio" Then
+                        Dim persona As New Socio(
                         Convert.ToInt32(fila("id")),
                         fila("nombre").ToString,
                         fila("usuario").ToString,
                         fila("contrasena").ToString,
                         fila("correo").ToString,
-                        fila("fecha_nacimiento").ToString,
-                        fila("tipo").ToString())
-                    listaPersonas.Add(persona)
+                        fila("fecha_nacimiento").ToString)
+                        listaPersonas.Add(persona)
+                    Else
+                        Dim persona As New Administrador(
+                        Convert.ToInt32(fila("id")),
+                        fila("nombre").ToString,
+                        fila("usuario").ToString,
+                        fila("contrasena").ToString,
+                        fila("correo").ToString,
+                        fila("fecha_nacimiento").ToString)
+                        listaPersonas.Add(persona)
+                    End If
                 Next
-            End Using
-            Return listaPersonas
+                Return listaPersonas
         Catch ex As Exception
             MsgBox("Error al consultar clientes: " & ex.Message)
             Return Nothing
@@ -122,9 +128,9 @@ Module ConexionDB
         WHERE g.id_usuario = @id_usuario AND g.estado = 'Alquilada'"
 
         Try
-            Using adaptador As New SQLiteDataAdapter(consulta, ConexionDB.Conexion)
-                obtenerResultadoConsulta(adaptador, idUsuario, listaPeliculas)
-            End Using
+            Dim adaptador As New SQLiteDataAdapter(consulta, ConexionDB.Conexion)
+            obtenerResultadoConsulta(adaptador, idUsuario, listaPeliculas)
+
         Catch ex As Exception
             MsgBox("Error al obtener películas alquiladas: " & ex.Message)
         End Try
@@ -144,11 +150,10 @@ Module ConexionDB
             "
 
         Try
-            Using adaptador As New SQLiteDataAdapter(consulta, ConexionDB.Conexion)
-                obtenerResultadoConsulta(adaptador, idUsuario, listaPeliculas)
-            End Using
+            Dim adaptador As New SQLiteDataAdapter(consulta, ConexionDB.Conexion)
+            obtenerResultadoConsulta(adaptador, idUsuario, listaPeliculas)
         Catch ex As Exception
-            MsgBox("Error al obtener películas no alquiladas: " & ex.Message)
+            MsgBox("Error al obtener películas no alquiladas: " & ex.StackTrace)
         End Try
 
         Return listaPeliculas
@@ -178,40 +183,85 @@ Module ConexionDB
 
     '----Insertar a la base de datos
     Public Sub crearUsuario(persona As Persona)
+        Dim tipo As String
+        If TypeOf persona Is Socio Then
+            tipo = "socio"
+        ElseIf TypeOf persona Is Administrador Then
+            tipo = "admin"
+        End If
         Try
             Dim consulta As String = "INSERT INTO persona(usuario, nombre, contrasena, correo, fecha_nacimiento, tipo) VALUES (@usuario, @nombre, @contrasena, @correo, @fecha_nacimiento, @tipo)"
 
-            Using comando As New SQLiteCommand(consulta, ConexionDB.Conexion)
-                comando.Parameters.AddWithValue("@usuario", persona.Usuario)
+            Dim comando As New SQLiteCommand(consulta, ConexionDB.Conexion)
+            comando.Parameters.AddWithValue("@usuario", persona.Usuario)
                 comando.Parameters.AddWithValue("@nombre", persona.NombreCompleto)
                 comando.Parameters.AddWithValue("@contrasena", persona.Contrasena)
                 comando.Parameters.AddWithValue("@correo", persona.Correo)
                 comando.Parameters.AddWithValue("@fecha_nacimiento", persona.FechaNacimiento)
-                comando.Parameters.AddWithValue("@tipo", persona.Tipo)
-                comando.ExecuteNonQuery()
-            End Using
-        Catch ex As Exception
-            MsgBox("Error al crear una persona: " & ex.StackTrace)
-        End Try
-    End Sub
-    Public Sub crearAlquiler(alquiler As Alquiler)
-        Dim consulta As String = ""
-    End Sub
-    Private Sub actualizarPelicula(tipoGestion As String, idPelicula As Integer)
-        Try
-            Dim consultaAlquilar = "UPDATE pelicula SET stock = stock - 1 WHERE id_pelicula = @id_pelicula"
-            Dim consultaDevolver = "UPDATE pelicula SET stock = stock + 1 WHERE id_pelicula = @id_pelicula"
-
-            Dim consulta As String = If(tipoGestion = "Alquilada", consultaAlquilar, consultaDevolver)
-
-            Dim comando As New SQLiteCommand(consulta, ConexionDB.Conexion)
-            comando.Parameters.AddWithValue("@id_pelicula", idPelicula)
+                comando.Parameters.AddWithValue("@tipo", tipo)
             comando.ExecuteNonQuery()
         Catch ex As Exception
-            MessageBox.Show("Error al actualizar una pelicula" + ex.Message)
+            MsgBox("Error al crear una persona: " & ex.Message)
         End Try
-
     End Sub
+
+    Public Sub crearAlquiler(alquiler As Alquiler)
+        Try
+            Dim consulta As String = "Insert into gestion_usuario(id_pelicula, id_usuario, fecha, estado, veces_alquilada) values (@id_pelicula, @id_usuario, @fecha, @estado, @veces_alquilada)"
+            Dim comando As New SQLiteCommand(consulta, ConexionDB.Conexion)
+            comando.Parameters.AddWithValue("@id_pelicula", alquiler.IdPelicula)
+                comando.Parameters.AddWithValue("@id_usuario", alquiler.IdSocio)
+                comando.Parameters.AddWithValue("@fecha", alquiler.FechaAlquiler)
+                comando.Parameters.AddWithValue("@estado", alquiler.Estado)
+                comando.Parameters.AddWithValue("@veces_alquilada", alquiler.vecesAlquilada)
+            comando.ExecuteNonQuery()
+        Catch ex As Exception
+            MsgBox("Error al crear el alquiler: " & ex.Message)
+        End Try
+    End Sub
+
+    Public Sub actualizarGestionYPelicula(idGestion As Integer, tipoGestion As String, idPelicula As Integer)
+        Dim consultaGestion As String
+        Dim consultaPelicula As String
+
+        ' Definir consultas según el tipo de gestión
+        If tipoGestion = "Alquilar" Then
+            consultaGestion = "UPDATE gestion_usuario SET veces_alquilada = veces_alquilada + 1, estado = 'Alquilada' WHERE id_gestion = @id_gestion"
+            consultaPelicula = "UPDATE pelicula SET stock = stock - 1 WHERE id_pelicula = @id_pelicula"
+        ElseIf tipoGestion = "Devolver" Then
+            consultaGestion = "UPDATE gestion_usuario SET estado = 'Devuelta' WHERE id_gestion = @id_gestion"
+            consultaPelicula = "UPDATE pelicula SET stock = stock + 1 WHERE id_pelicula = @id_pelicula"
+        Else
+            MessageBox.Show("Tipo de gestión no válido.")
+            Exit Sub
+        End If
+
+        ' Conexión y transacción
+        Dim conexion As SQLiteConnection = ConexionDB.Conexion
+        Dim transaccion As SQLiteTransaction = conexion.BeginTransaction()
+
+        Try
+            ' Actualizar tabla gestion_usuario
+            Using comandoGestion As New SQLiteCommand(consultaGestion, conexion, transaccion)
+                comandoGestion.Parameters.AddWithValue("@id_gestion", idGestion)
+                comandoGestion.ExecuteNonQuery()
+            End Using
+
+            ' Actualizar tabla pelicula
+            Using comandoPelicula As New SQLiteCommand(consultaPelicula, conexion, transaccion)
+                comandoPelicula.Parameters.AddWithValue("@id_pelicula", idPelicula)
+                comandoPelicula.ExecuteNonQuery()
+            End Using
+
+            ' Confirmar transacción
+            transaccion.Commit()
+        Catch ex As Exception
+            ' Si hay un error, deshacer cambios
+            transaccion.Rollback()
+            MessageBox.Show("Error al actualizar: " & ex.Message)
+        End Try
+    End Sub
+
 
     Private Function convertirImagen(imageBytes As Byte()) As Image
         If imageBytes IsNot Nothing Then

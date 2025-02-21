@@ -11,6 +11,7 @@ Public Class Form1
 
         ConexionDB.conexionBaseDatosSQLite()
         listaPersonas = ConexionDB.obtenerUsuarios()
+
     End Sub
 
     ' Parte inicio de sesion y su logica
@@ -25,7 +26,7 @@ Public Class Form1
 
         If comprobarInicio(usuario, contrasena, TipoInicioSesion) Then
             If TipoInicioSesion = "socio" Then
-                inicioSocio(usuario, contrasena)
+                inicioSocio()
             ElseIf TipoInicioSesion = "admin" Then
                 inicioAdmin()
             End If
@@ -35,19 +36,20 @@ Public Class Form1
     End Sub
 
     Private Function comprobarInicio(usuario As String, contrasena As String, tipo As String) As Boolean
-        Dim esAprobado As Boolean = False
         For Each persona In listaPersonas
-            If (persona.Usuario = usuario And persona.Contrasena = contrasena And persona.Tipo = tipo) Then
-                esAprobado = True
-                personaIniciada = persona
+            If persona.Usuario = usuario AndAlso persona.Contrasena = contrasena Then
+                If (TypeOf persona Is Socio AndAlso tipo = "socio") OrElse (TypeOf persona Is Administrador AndAlso tipo = "admin") Then
+                    personaIniciada = persona
+                    Return True
+                End If
             End If
         Next
-        Return esAprobado
+        Return False
     End Function
 
-    Private Sub inicioSocio(usuario As String, contrasena As String)
+    Private Sub inicioSocio()
         Form2.socioIniciado = personaIniciada
-        Panels.socioIniciado = personaIniciada.Id
+        PanelSocio.socioIniciado = personaIniciada
         Form2.Form2_Load(Nothing, Nothing)
         Form2.Show()
         limpiar()
@@ -55,7 +57,7 @@ Public Class Form1
     End Sub
 
     Private Sub inicioAdmin()
-        MessageBox.Show("Conectado Correctamente", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        UIAdministrador.Show()
     End Sub
 
     'Parte creacion de cuenta y su logica
@@ -99,7 +101,13 @@ Public Class Form1
             Return False
         End If
 
-        Dim persona = New Persona(0, nombreCompleto, usuario, contrasena, correo, fecha, tipo)
+        Dim persona As Persona
+        If (tipo = "socio") Then
+            persona = New Socio(0, nombreCompleto, usuario, contrasena, correo, fecha)
+        ElseIf (tipo = "admin") Then
+            persona = New Administrador(0, nombreCompleto, usuario, contrasena, correo, fecha)
+        End If
+
         ConexionDB.crearUsuario(persona)
 
         Return True
@@ -197,8 +205,6 @@ Public Class Form1
         panelIniciar.Hide()
         Panel3.Hide()
     End Sub
-
-
     Private Sub lblCrearCuenta_MouseEnter(sender As Object, e As EventArgs) Handles lblCrearCuenta.MouseEnter
         lblCrearCuenta.ForeColor = SystemColors.Highlight
     End Sub

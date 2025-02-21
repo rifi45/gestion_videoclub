@@ -1,5 +1,5 @@
 ﻿Public Class Form2
-    Public socioIniciado As Persona
+    Public socioIniciado As Socio
     Dim listaPeliculas As New List(Of Pelicula)
     Dim peliculasAAlquilar As New List(Of Pelicula)
     Dim PeliculasAlquiladas As List(Of Pelicula)
@@ -13,24 +13,27 @@
         lblNombre.Text = socioIniciado.NombreCompleto
         lblUser.Text = socioIniciado.Usuario
 
+        PanelSocio.socioIniciado = socioIniciado
+
         listaPeliculas = ConexionDB.obtenerPeliculas
+        socioIniciado.Alquileres = ConexionDB.obtenerAlquileres(socioIniciado.Id)
     End Sub
     'Click Alquilar peliculas
-    Private Sub btnAlquilar_Click(sender As Object, e As EventArgs) Handles btnAlquilar.Click
+    Public Sub btnAlquilar_Click(sender As Object, e As EventArgs) Handles btnAlquilar.Click
         peliculasAAlquilar = ConexionDB.obtenerPeliculasNoAlquiladas(socioIniciado.Id)
         fijarBtnColor(btnAlquilar)
         iniciarPanel(peliculasAAlquilar, "Alquilar")
     End Sub
 
     'Click devolver peliculas
-    Private Sub btnDevolver_Click(sender As Object, e As EventArgs) Handles btnDevolver.Click
+    Public Sub btnDevolver_Click(sender As Object, e As EventArgs) Handles btnDevolver.Click
         PeliculasAlquiladas = ConexionDB.obtenerPeliculasAlquiladas(socioIniciado.Id)
         fijarBtnColor(btnDevolver)
         iniciarPanel(PeliculasAlquiladas, "Devolver")
     End Sub
 
     'Click consultar Peliculas
-    Private Sub btnConsultarPelis_Click(sender As Object, e As EventArgs) Handles btnConsultarPelis.Click
+    Public Sub btnConsultarPelis_Click(sender As Object, e As EventArgs) Handles btnConsultarPelis.Click
         fijarBtnColor(btnConsultarPelis)
         iniciarPanel(listaPeliculas, "Peliculas")
     End Sub
@@ -42,7 +45,7 @@
     'Click para Cerrar Sesion
     Private Sub btnCerrarSesion_Click(sender As Object, e As EventArgs) Handles btnCerrarSesion.Click
         fijarBtnColor(btnCerrarSesion)
-        Panels.limpiar()
+        PanelSocio.limpiar()
 
         Form1.Show()
         Me.Hide()
@@ -58,13 +61,15 @@
 
     'Metodo para iniciar el listView de historico
     Private Sub ActualizarHistorial(alquilerEstado As String)
+        'Actualizar el estado de alquileres despues de alquilar o devolver una pelicula
+        socioIniciado.Alquileres = ConexionDB.obtenerAlquileres(socioIniciado.Id)
         establecerColoresHistorico(alquilerEstado)
         Dim alquileres As New List(Of Alquiler)
         Dim Contador As Integer = 0
 
         ListView1.Items.Clear()
 
-        alquileres = ConexionDB.obtenerAlquileres(socioIniciado.Id)
+        alquileres = socioIniciado.Alquileres
 
         If alquileres IsNot Nothing AndAlso alquileres.Count > 0 Then
             For Each alquiler In alquileres
@@ -107,10 +112,10 @@
     End Sub
     ' metodo para iniciar los paneles
     Private Sub iniciarPanel(listaPeliculas As List(Of Pelicula), accion As String)
-        Panels.limpiar()
-        Panels.panelPrincipal(Me, accion)
-        Panels.anadirLinearPanel()
-        Panels.anadirPanelListaPeliculas(listaPeliculas, accion)
+        PanelSocio.limpiar()
+        PanelSocio.panelPrincipal(Me, accion)
+        PanelSocio.anadirLinearPanel()
+        PanelSocio.anadirPanelListaPeliculas(listaPeliculas, accion)
     End Sub
     ' metodo para organizar los colores de el boton historico
     Private Sub establecerColoresHistorico(alquilerEstado As String)

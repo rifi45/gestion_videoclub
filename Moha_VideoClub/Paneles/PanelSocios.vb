@@ -1,6 +1,6 @@
-﻿Module Panels
+﻿Module PanelSocio
     Public panelPrin As New Panel
-    Public socioIniciado As New Integer
+    Public socioIniciado As Socio
     Dim linearPanel As New FlowLayoutPanel
     Dim mapaPeliculas As New Dictionary(Of Pelicula, CheckBox)
     Dim _peliculasSeleccionadas As New List(Of Pelicula)
@@ -21,6 +21,7 @@
         End If
 
         lblTitulo = CrearLabel(Accion, New Point(20, 25), 12, FontStyle.Bold)
+        lblTitulo.ForeColor = SystemColors.Highlight
         panelPrin.Controls.Add(lblTitulo)
 
         form.Controls.Add(panelPrin)
@@ -92,12 +93,40 @@
         Dim accion As String = btnAccion.Text
 
         If accion = "Alquilar" Then
-
+            recorrerPeliculas("Alquilar")
+            MessageBox.Show("Alquilada", "COOL", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Form2.btnAlquilar_Click(sender, e)
         Else
-
+            recorrerPeliculas("Devolver")
+            MessageBox.Show("Devuelta", "COOL", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            Form2.btnDevolver_Click(sender, e)
         End If
     End Sub
 
+    Private Sub recorrerPeliculas(gestion As String)
+        If PeliculasSeleccionadas.Count > 0 Then
+            For Each pelicula In PeliculasSeleccionadas
+                gestionarAlquiler(pelicula, gestion)
+            Next
+        Else
+            MessageBox.Show("No hay peliculas seleccionadas", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End If
+    End Sub
+    Private Sub gestionarAlquiler(pelicula As Pelicula, gestion As String)
+        Dim estaEnBD As Boolean = False
+        For Each alquiler In socioIniciado.Alquileres
+            If (pelicula.Id = alquiler.IdPelicula) Then
+                ConexionDB.actualizarGestionYPelicula(alquiler.IdAlquiler, gestion, pelicula.Id)
+                estaEnBD = True
+            End If
+        Next
+
+        If estaEnBD = False Then
+            Dim fechaHoy As String = DateTime.Now.ToString("dd/MM/yyyy")
+            Dim alquiler As New Alquiler(0, pelicula.Id, socioIniciado.Id, fechaHoy, "Alquilada", 1)
+            ConexionDB.crearAlquiler(alquiler)
+        End If
+    End Sub
     Private Sub imgVerDetalles_Click(sender As Object, e As EventArgs)
         Dim img As PictureBox = DirectCast(sender, PictureBox)
         Dim peliculaSeleccionada As Pelicula = DirectCast(img.Tag, Pelicula)
