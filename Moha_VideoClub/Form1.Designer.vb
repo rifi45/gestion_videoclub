@@ -29,14 +29,12 @@ Partial Class Form1
         PictureBox3 = New PictureBox()
         Panel2 = New Panel()
         btnInicioSesion = New Button()
-        lblCrearCuenta = New Label()
         Panel4 = New Panel()
         lblSocio = New Label()
         lblAdmin = New Label()
         txtUsuario = New TextBox()
         txtContrasena = New TextBox()
         pnlCrearUsuario = New Panel()
-        lblIniciar = New Label()
         Label10 = New Label()
         lblAdminCrear = New Label()
         lblSocioCrear = New Label()
@@ -57,10 +55,10 @@ Partial Class Form1
         Panel7 = New Panel()
         txtNombreCompletoCrear = New TextBox()
         Panel6 = New Panel()
-        Panel12 = New Panel()
         Panel3 = New Panel()
         Label2 = New Label()
         panelIniciar = New Panel()
+        Panel12 = New Panel()
         CType(PictureBox1, ComponentModel.ISupportInitialize).BeginInit()
         CType(PictureBox2, ComponentModel.ISupportInitialize).BeginInit()
         CType(PictureBox3, ComponentModel.ISupportInitialize).BeginInit()
@@ -139,21 +137,9 @@ Partial Class Form1
         btnInicioSesion.Location = New Point(91, 481)
         btnInicioSesion.Name = "btnInicioSesion"
         btnInicioSesion.Size = New Size(286, 40)
-        btnInicioSesion.TabIndex = 3
+        btnInicioSesion.TabIndex = 2
         btnInicioSesion.Text = "INICIAR SESION"
         btnInicioSesion.UseVisualStyleBackColor = False
-        ' 
-        ' lblCrearCuenta
-        ' 
-        lblCrearCuenta.AutoSize = True
-        lblCrearCuenta.Cursor = Cursors.Hand
-        lblCrearCuenta.Font = New Font("Georgia", 7.8F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        lblCrearCuenta.ForeColor = SystemColors.Desktop
-        lblCrearCuenta.Location = New Point(182, 390)
-        lblCrearCuenta.Name = "lblCrearCuenta"
-        lblCrearCuenta.Size = New Size(116, 16)
-        lblCrearCuenta.TabIndex = 7
-        lblCrearCuenta.Text = "¡CREAR CUENTA!"
         ' 
         ' Panel4
         ' 
@@ -194,7 +180,7 @@ Partial Class Form1
         txtUsuario.Multiline = True
         txtUsuario.Name = "txtUsuario"
         txtUsuario.Size = New Size(255, 31)
-        txtUsuario.TabIndex = 1
+        txtUsuario.TabIndex = 0
         ' 
         ' txtContrasena
         ' 
@@ -206,11 +192,10 @@ Partial Class Form1
         txtContrasena.Name = "txtContrasena"
         txtContrasena.PasswordChar = "*"c
         txtContrasena.Size = New Size(255, 31)
-        txtContrasena.TabIndex = 2
+        txtContrasena.TabIndex = 1
         ' 
         ' pnlCrearUsuario
         ' 
-        pnlCrearUsuario.Controls.Add(lblIniciar)
         pnlCrearUsuario.Controls.Add(Label10)
         pnlCrearUsuario.Controls.Add(lblAdminCrear)
         pnlCrearUsuario.Controls.Add(lblSocioCrear)
@@ -234,24 +219,13 @@ Partial Class Form1
         pnlCrearUsuario.Location = New Point(483, -4)
         pnlCrearUsuario.Name = "pnlCrearUsuario"
         pnlCrearUsuario.Size = New Size(461, 540)
-        pnlCrearUsuario.TabIndex = 14
-        ' 
-        ' lblIniciar
-        ' 
-        lblIniciar.AutoSize = True
-        lblIniciar.Cursor = Cursors.Hand
-        lblIniciar.Font = New Font("Georgia", 7.8F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        lblIniciar.ForeColor = SystemColors.Desktop
-        lblIniciar.Location = New Point(4, 13)
-        lblIniciar.Name = "lblIniciar"
-        lblIniciar.Size = New Size(112, 16)
-        lblIniciar.TabIndex = 37
-        lblIniciar.Text = "INICIAR SESION"
+        pnlCrearUsuario.TabIndex = 17
         ' 
         ' Label10
         ' 
         Label10.AutoSize = True
         Label10.Font = New Font("Georgia", 12F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
+        Label10.ForeColor = SystemColors.Highlight
         Label10.Location = New Point(172, 10)
         Label10.Name = "Label10"
         Label10.Size = New Size(101, 24)
@@ -297,11 +271,11 @@ Partial Class Form1
         btnCrearCuenta.FlatAppearance.MouseDownBackColor = SystemColors.Control
         btnCrearCuenta.FlatAppearance.MouseOverBackColor = Color.CornflowerBlue
         btnCrearCuenta.Font = New Font("Georgia", 9F, FontStyle.Bold, GraphicsUnit.Point, CByte(0))
-        btnCrearCuenta.ForeColor = SystemColors.ActiveCaptionText
+        btnCrearCuenta.ForeColor = SystemColors.Highlight
         btnCrearCuenta.Location = New Point(97, 484)
         btnCrearCuenta.Name = "btnCrearCuenta"
         btnCrearCuenta.Size = New Size(286, 40)
-        btnCrearCuenta.TabIndex = 32
+        btnCrearCuenta.TabIndex = 8
         btnCrearCuenta.Text = "CREAR CUENTA"
         btnCrearCuenta.UseVisualStyleBackColor = False
         ' 
@@ -344,7 +318,7 @@ Partial Class Form1
         txtFechaNacCrear.Multiline = True
         txtFechaNacCrear.Name = "txtFechaNacCrear"
         txtFechaNacCrear.Size = New Size(286, 31)
-        txtFechaNacCrear.TabIndex = 8
+        txtFechaNacCrear.TabIndex = 7
         ' 
         ' Panel10
         ' 
@@ -384,7 +358,7 @@ Partial Class Form1
         txtContrasenaCrear.Name = "txtContrasenaCrear"
         txtContrasenaCrear.PasswordChar = "*"c
         txtContrasenaCrear.Size = New Size(286, 31)
-        txtContrasenaCrear.TabIndex = 7
+        txtContrasenaCrear.TabIndex = 6
         ' 
         ' Panel8
         ' 
@@ -403,7 +377,7 @@ Partial Class Form1
         txtUsuarioCrear.Multiline = True
         txtUsuarioCrear.Name = "txtUsuarioCrear"
         txtUsuarioCrear.Size = New Size(286, 31)
-        txtUsuarioCrear.TabIndex = 5
+        txtUsuarioCrear.TabIndex = 4
         ' 
         ' Panel9
         ' 
@@ -422,7 +396,7 @@ Partial Class Form1
         txtCorreoCrear.Multiline = True
         txtCorreoCrear.Name = "txtCorreoCrear"
         txtCorreoCrear.Size = New Size(286, 31)
-        txtCorreoCrear.TabIndex = 6
+        txtCorreoCrear.TabIndex = 5
         ' 
         ' Panel7
         ' 
@@ -441,7 +415,7 @@ Partial Class Form1
         txtNombreCompletoCrear.Multiline = True
         txtNombreCompletoCrear.Name = "txtNombreCompletoCrear"
         txtNombreCompletoCrear.Size = New Size(286, 31)
-        txtNombreCompletoCrear.TabIndex = 4
+        txtNombreCompletoCrear.TabIndex = 3
         ' 
         ' Panel6
         ' 
@@ -450,14 +424,6 @@ Partial Class Form1
         Panel6.Name = "Panel6"
         Panel6.Size = New Size(286, 1)
         Panel6.TabIndex = 14
-        ' 
-        ' Panel12
-        ' 
-        Panel12.BackColor = SystemColors.ActiveCaptionText
-        Panel12.Location = New Point(480, 18)
-        Panel12.Name = "Panel12"
-        Panel12.Size = New Size(1, 509)
-        Panel12.TabIndex = 15
         ' 
         ' Panel3
         ' 
@@ -493,12 +459,19 @@ Partial Class Form1
         panelIniciar.Controls.Add(PictureBox3)
         panelIniciar.Controls.Add(lblSocio)
         panelIniciar.Controls.Add(btnInicioSesion)
-        panelIniciar.Controls.Add(lblCrearCuenta)
         panelIniciar.Controls.Add(Panel4)
         panelIniciar.Location = New Point(12, -4)
         panelIniciar.Name = "panelIniciar"
         panelIniciar.Size = New Size(458, 547)
-        panelIniciar.TabIndex = 17
+        panelIniciar.TabIndex = 14
+        ' 
+        ' Panel12
+        ' 
+        Panel12.BackColor = SystemColors.ActiveCaptionText
+        Panel12.Location = New Point(480, 18)
+        Panel12.Name = "Panel12"
+        Panel12.Size = New Size(1, 509)
+        Panel12.TabIndex = 15
         ' 
         ' Form1
         ' 
@@ -510,7 +483,7 @@ Partial Class Form1
         Controls.Add(Panel12)
         Controls.Add(pnlCrearUsuario)
         Name = "Form1"
-        Text = "Form1"
+        Text = "4"
         CType(PictureBox1, ComponentModel.ISupportInitialize).EndInit()
         CType(PictureBox2, ComponentModel.ISupportInitialize).EndInit()
         CType(PictureBox3, ComponentModel.ISupportInitialize).EndInit()
@@ -530,7 +503,6 @@ Partial Class Form1
     Friend WithEvents PictureBox3 As PictureBox
     Friend WithEvents Panel2 As Panel
     Friend WithEvents btnInicioSesion As Button
-    Friend WithEvents lblCrearCuenta As Label
     Friend WithEvents Panel4 As Panel
     Friend WithEvents lblSocio As Label
     Friend WithEvents lblAdmin As Label
@@ -557,10 +529,9 @@ Partial Class Form1
     Friend WithEvents lblSocioCrear As Label
     Friend WithEvents Panel11 As Panel
     Friend WithEvents btnCrearCuenta As Button
-    Friend WithEvents Panel12 As Panel
     Friend WithEvents Panel3 As Panel
     Friend WithEvents Label2 As Label
     Friend WithEvents panelIniciar As Panel
-    Friend WithEvents lblIniciar As Label
+    Friend WithEvents Panel12 As Panel
 
 End Class

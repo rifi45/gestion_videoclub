@@ -31,8 +31,6 @@
         Me._duracion = 0
         Me._stock = 0
     End Sub
-
-
     ' Propiedades
     Public Property Id As Integer
         Get

@@ -1,0 +1,20 @@
+Acción  
+Comedia  
+Drama  
+Terror  
+Ciencia Ficción  
+Aventura  
+Fantasía  
+Misterio  
+Documental  
+Animación  
+Romance  
+Suspenso  
+Musical  
+Histórico  
+Bélico  
+Deportivo  
+Western  
+Crimen  
+Noir  
+Biográfico

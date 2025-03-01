@@ -1,4 +1,5 @@
-﻿Imports System.Data.Entity.Infrastructure.Design
+﻿'Formulario que sirve para la visualizacion de datos de cada pelicula
+
 Imports AxWMPLib
 
 Public Class Form3
@@ -8,7 +9,9 @@ Public Class Form3
     Private panelTrailer As Panel
     Private wmpPlayer As AxWindowsMediaPlayer
 
+    'Directamente se cargan los datos de la pelicula al formulario junto con un icono de reproducir para ver los Trailer de cada pelicula si esta disponible
     Private Sub Form3_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        'Tambien se crearan los controles necesarios para esta clase
         Me.Text = "Detalles de la Película"
         Me.Size = New Size(500, 350)
         Me.BackColor = SystemColors.Control
@@ -87,6 +90,7 @@ Public Class Form3
         Return lbl
     End Function
 
+    ' Metodo para ver el Trailer en caso de exista.
     Private Sub VerTrailer(sender As Object, e As EventArgs)
         If Not String.IsNullOrEmpty(Pelicula.Trailer) Then
             panelInfo.Visible = False
@@ -98,6 +102,3 @@ Public Class Form3
         End If
     End Sub
 End Class
-
-
-

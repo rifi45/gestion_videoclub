@@ -1,20 +1,18 @@
-﻿'Falta la creacion de usuario, solamente eroor en la base de datos al insertar consultar mañana.
+﻿'Form que sirve para el incio de sesion y la creacion de usuarios.
 
 Public Class Form1
     Dim TipoInicioSesion As String
     Dim TipoCrearUsuario As String
     Dim listaPersonas As New List(Of Persona)
     Dim personaIniciada As Persona
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        pnlCrearUsuario.Hide()
+    Public Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Panel3.Hide()
 
         ConexionDB.conexionBaseDatosSQLite()
         listaPersonas = ConexionDB.obtenerUsuarios()
-
     End Sub
 
-    ' Parte inicio de sesion y su logica
+    'Evento inicio de sesion
     Private Sub btnInicioSesion_Click(sender As Object, e As EventArgs) Handles btnInicioSesion.Click
         Dim usuario As String = txtUsuario.Text
         Dim contrasena As String = txtContrasena.Text
@@ -30,11 +28,33 @@ Public Class Form1
             ElseIf TipoInicioSesion = "admin" Then
                 inicioAdmin()
             End If
+
+            limpiar()
         Else
             MessageBox.Show("Usuario o Contraseña incorrecto", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
     End Sub
 
+    'Evento crear usuario
+    Private Sub btnCrearCuenta_Click(sender As Object, e As EventArgs) Handles btnCrearCuenta.Click
+        If ComprobarDatos() = False Then
+            If TipoCrearUsuario = "admin" Or TipoCrearUsuario = "socio" Then
+                Dim usuarioCreado As Boolean = crearUnUsuario()
+
+                If usuarioCreado Then
+                    Panel3.Show()
+                    limpiar()
+                    listaPersonas = ConexionDB.obtenerUsuarios()
+                End If
+            Else
+                MessageBox.Show("Porfavor Seleccione Admin o Socio", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            End If
+        Else
+            MessageBox.Show("Porfavor rellene los espacios ROJOS", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        End If
+    End Sub
+
+    'Comprobar que la persona iniciada existe.
     Private Function comprobarInicio(usuario As String, contrasena As String, tipo As String) As Boolean
         For Each persona In listaPersonas
             If persona.Usuario = usuario AndAlso persona.Contrasena = contrasena Then
@@ -47,37 +67,24 @@ Public Class Form1
         Return False
     End Function
 
+    'Metodo para el inicio en caso de socio
     Private Sub inicioSocio()
         Form2.socioIniciado = personaIniciada
         PanelSocio.socioIniciado = personaIniciada
         Form2.Form2_Load(Nothing, Nothing)
         Form2.Show()
-        limpiar()
         Me.Hide()
     End Sub
 
+    'Metodo para el inicio en caso de admin
     Private Sub inicioAdmin()
+        UIAdministrador.adminAccedido = personaIniciada
+        UIAdministrador.mensajeBienvenida()
         UIAdministrador.Show()
+        Me.Hide()
     End Sub
 
-    'Parte creacion de cuenta y su logica
-    Private Sub btnCrearCuenta_Click(sender As Object, e As EventArgs) Handles btnCrearCuenta.Click
-        If ComprobarDatos() = False Then
-            If TipoCrearUsuario = "admin" Or TipoCrearUsuario = "socio" Then
-                Dim usuarioCreado As Boolean = crearUnUsuario()
-
-                If usuarioCreado Then
-                    MostrarPantallaInicio()
-                    listaPersonas = ConexionDB.obtenerUsuarios()
-                End If
-            Else
-                MessageBox.Show("Porfavor Seleccione Admin o Socio", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            End If
-        Else
-            MessageBox.Show("Porfavor rellene los espacios ROJOS", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-        End If
-    End Sub
-
+    'Funcion para crear un usuario nuevo
     Private Function crearUnUsuario() As Boolean
         Dim nombreCompleto As String = txtNombreCompletoCrear.Text
         Dim usuario As String = txtUsuarioCrear.Text
@@ -113,6 +120,7 @@ Public Class Form1
         Return True
     End Function
 
+    'Dos metodos para comprobaciones de la validez de datos
     Private Function comprobarNombreUsuario(usuario As String) As Boolean
         Dim aprobado As Boolean = True
         For Each persona In listaPersonas
@@ -135,19 +143,15 @@ Public Class Form1
         Return DateTime.TryParseExact(fecha, "dd/MM/yyyy", Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, resultado)
     End Function
 
-    Private Sub MostrarPantallaInicio()
-        pnlCrearUsuario.Hide()
-        panelIniciar.Show()
-        Panel3.Show()
-        limpiar()
-    End Sub
-
+    'Metodo para limpiar los datos
     Private Sub limpiar()
         txtNombreCompletoCrear.Text = ""
         txtUsuarioCrear.Text = ""
         txtContrasena.Text = ""
         txtCorreoCrear.Text = ""
         txtFechaNacCrear.Text = ""
+        txtUsuario.Text = ""
+        txtContrasena.Text = ""
         txtUsuario.Text = ""
         txtContrasena.Text = ""
     End Sub
@@ -176,7 +180,7 @@ Public Class Form1
         Return noAprobado
     End Function
 
-    '-------------------FRONT END----------------------
+
     'Parte donde me encargo de cambiar de colores a labels y todo lo que tiene que ver con la interfaz de usuario
     Private Sub lblSocio_Click(sender As Object, e As EventArgs) Handles lblSocio.Click
         elegirRol(lblSocio, lblAdmin, "socio", "iniciar")
@@ -198,31 +202,5 @@ Public Class Form1
         Else
             TipoCrearUsuario = eleccion
         End If
-    End Sub
-
-    Private Sub lblCrearCuenta_Click(sender As Object, e As EventArgs) Handles lblCrearCuenta.Click
-        pnlCrearUsuario.Show()
-        panelIniciar.Hide()
-        Panel3.Hide()
-    End Sub
-    Private Sub lblCrearCuenta_MouseEnter(sender As Object, e As EventArgs) Handles lblCrearCuenta.MouseEnter
-        lblCrearCuenta.ForeColor = SystemColors.Highlight
-    End Sub
-
-    Private Sub lblCrearCuenta_MouseLeave(sender As Object, e As EventArgs) Handles lblCrearCuenta.MouseLeave
-        lblCrearCuenta.ForeColor = SystemColors.ControlText
-    End Sub
-
-    Private Sub lblIniciar_MouseEnter(sender As Object, e As EventArgs) Handles lblIniciar.MouseEnter
-        lblIniciar.ForeColor = SystemColors.Highlight
-    End Sub
-
-    Private Sub lblIniciar_MouseLeave(sender As Object, e As EventArgs) Handles lblIniciar.MouseLeave
-        lblIniciar.ForeColor = SystemColors.ControlText
-    End Sub
-
-    Private Sub Label8_Click(sender As Object, e As EventArgs) Handles lblIniciar.Click
-        pnlCrearUsuario.Hide()
-        panelIniciar.Show()
     End Sub
 End Class

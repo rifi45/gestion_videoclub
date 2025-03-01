@@ -1,4 +1,5 @@
-﻿Public Class Form2
+﻿'Formulario que sirve para la gestion de Socios y sus alquileres.
+Public Class Form2
     Public socioIniciado As Socio
     Dim listaPeliculas As New List(Of Pelicula)
     Dim peliculasAAlquilar As New List(Of Pelicula)
@@ -6,8 +7,9 @@
     Dim CheckBoxes As New List(Of CheckBox)
     Dim CheckBoxesSeleccionados As Integer
     Dim btnAccion As New Button
+
+    'Al iniciar el formulario se consultan lista de peliculas de cada Socio y sus alquileres
     Public Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.Text = "Peliculas"
         restablecerColor()
         panelHistorico.Hide()
         lblNombre.Text = socioIniciado.NombreCompleto
@@ -16,13 +18,15 @@
         PanelSocio.socioIniciado = socioIniciado
 
         listaPeliculas = ConexionDB.obtenerPeliculas
-        socioIniciado.Alquileres = ConexionDB.obtenerAlquileres(socioIniciado.Id)
+        socioIniciado.actualizarAlquileres()
     End Sub
     'Click Alquilar peliculas
     Public Sub btnAlquilar_Click(sender As Object, e As EventArgs) Handles btnAlquilar.Click
         peliculasAAlquilar = ConexionDB.obtenerPeliculasNoAlquiladas(socioIniciado.Id)
         fijarBtnColor(btnAlquilar)
         iniciarPanel(peliculasAAlquilar, "Alquilar")
+        socioIniciado.actualizarAlquileres()
+        listaPeliculas = ConexionDB.obtenerPeliculas
     End Sub
 
     'Click devolver peliculas
@@ -30,6 +34,8 @@
         PeliculasAlquiladas = ConexionDB.obtenerPeliculasAlquiladas(socioIniciado.Id)
         fijarBtnColor(btnDevolver)
         iniciarPanel(PeliculasAlquiladas, "Devolver")
+        socioIniciado.actualizarAlquileres()
+        listaPeliculas = ConexionDB.obtenerPeliculas
     End Sub
 
     'Click consultar Peliculas

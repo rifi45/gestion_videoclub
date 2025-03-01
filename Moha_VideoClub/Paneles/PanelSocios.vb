@@ -1,4 +1,7 @@
-﻿Module PanelSocio
+﻿
+' Modulo que sirve para la creacion y el control de los paneles de la parte de usuario
+Module PanelSocio
+    'Algunas variables que interesa tenerlas a nivel de clase
     Public panelPrin As New Panel
     Public socioIniciado As Socio
     Dim linearPanel As New FlowLayoutPanel
@@ -6,10 +9,12 @@
     Dim _peliculasSeleccionadas As New List(Of Pelicula)
     Public btnAccion As New Button
 
+    'Metodo para la creacion del panel principal que contendra el panel de cada pelicula
     Public Sub panelPrincipal(form As Form, Accion As String)
         Dim lblTitulo As New Label
         CrearPanel(panelPrin, New Size(600, 500), New Point(219, 1))
 
+        'Verificar que la accion no sea peliculas para poner un boton de alquilar o devolver
         If Accion <> "Peliculas" Then
             btnAccion = CrearBoton(Accion, New Point(460, 11))
             btnAccion.Font = New Font("Lucida Bright", 10, FontStyle.Bold)
@@ -24,8 +29,10 @@
         lblTitulo.ForeColor = SystemColors.Highlight
         panelPrin.Controls.Add(lblTitulo)
 
+        'Se añade el panel al formulario
         form.Controls.Add(panelPrin)
     End Sub
+    'Metodo para la creacion del linearPanel que gestionara el panel de cada peliculas
     Public Sub anadirLinearPanel()
         linearPanel = New FlowLayoutPanel With {
             .Size = New Size(590, 350),
@@ -33,10 +40,13 @@
             .AutoScroll = True
             }
 
+        'Se añade al panel principal
         panelPrin.Controls.Add(linearPanel)
     End Sub
 
+    'El panel que tendra el formato de mostracion de nuestras peliculas en la area de socio
     Public Sub anadirPanelListaPeliculas(peliculas As List(Of Pelicula), accion As String)
+        'Para cada pelicula obtenida de la base de datos se creara un panel que contenga su informacion
         For Each pelicula In peliculas
             Dim panelPeli As New Panel
             Dim imgPelicula As New PictureBox
@@ -63,11 +73,13 @@
             panelPeli.Controls.Add(director)
             panelPeli.Controls.Add(anio)
 
+            'si no es accion peliculas se le añade un check box
             If (accion <> "Peliculas") Then
                 check.Location = New Point(520, 50)
                 panelPeli.Controls.Add(check)
             Else
-                verTrailer(panelPeli, pelicula)
+                ' en caso de si, se añade una image box para visualizar los datos
+                verInfo(panelPeli, pelicula)
             End If
 
             mapaPeliculas.Add(pelicula, check)
@@ -75,7 +87,8 @@
         Next
     End Sub
 
-    Public Sub verTrailer(panel As Panel, pelicula As Pelicula)
+    'Metodo que sirve para añadir un picture box para panelPelicula para visualizar su informacion
+    Public Sub verInfo(panel As Panel, pelicula As Pelicula)
         Dim imgVerDetalles As New PictureBox
         Dim image As Image = Image.FromFile("C:\Users\mohap\Downloads\avance.png")
 
@@ -89,9 +102,11 @@
         panel.Controls.Add(imgVerDetalles)
     End Sub
 
+    'Evento para el boton accion
     Private Sub btnAccion_Click(sender As Object, e As EventArgs)
         Dim accion As String = btnAccion.Text
 
+        'Depende de la logica alquila o devuelve peliculas seleccionadas
         If accion = "Alquilar" Then
             recorrerPeliculas("Alquilar")
             MessageBox.Show("Alquilada", "COOL", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -103,6 +118,9 @@
         End If
     End Sub
 
+
+    'vvvv-------------ERROR LOGICO AQUI------------------vvvv
+    'Metodo para recorrer y ver las peliculas seleccionadas si ya han sido alquiladas
     Private Sub recorrerPeliculas(gestion As String)
         If PeliculasSeleccionadas.Count > 0 Then
             For Each pelicula In PeliculasSeleccionadas
@@ -112,21 +130,41 @@
             MessageBox.Show("No hay peliculas seleccionadas", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         End If
     End Sub
+
+    'Comprobar que las peliculas seleccionadas estan en la base de datos.
     Private Sub gestionarAlquiler(pelicula As Pelicula, gestion As String)
         Dim estaEnBD As Boolean = False
+        ' Si encuentra que el socio ya alquiló la película, actualiza el estado
         For Each alquiler In socioIniciado.Alquileres
             If (pelicula.Id = alquiler.IdPelicula) Then
-                ConexionDB.actualizarGestionYPelicula(alquiler.IdAlquiler, gestion, pelicula.Id)
-                estaEnBD = True
+                ' Si la gestión es devolver, cambiar el estado a 'Devuelta', sino se mantiene como 'Alquilada'
+                If gestion = "Devolver" And alquiler.Estado = "Alquilada" Then
+                    ConexionDB.actualizarGestionYPelicula(alquiler.IdAlquiler, gestion, pelicula.Id)
+                    alquiler.Estado = "Devuelta"
+                    estaEnBD = True
+                    Exit For
+                ElseIf gestion = "Alquilar" And alquiler.Estado = "Devuelta" Then
+                    ' Si la película fue devuelta, la alquilamos de nuevo
+                    ConexionDB.actualizarGestionYPelicula(alquiler.IdAlquiler, gestion, pelicula.Id)
+                    alquiler.Estado = "Alquilada"
+                    estaEnBD = True
+                    Exit For
+                End If
             End If
         Next
 
-        If estaEnBD = False Then
+        ' Si la película no está en la base de datos, creamos un nuevo alquiler
+        If Not estaEnBD Then
             Dim fechaHoy As String = DateTime.Now.ToString("dd/MM/yyyy")
             Dim alquiler As New Alquiler(0, pelicula.Id, socioIniciado.Id, fechaHoy, "Alquilada", 1)
+            socioIniciado.actualizarAlquileres()
+            MsgBox(socioIniciado.Alquileres.Count())
             ConexionDB.crearAlquiler(alquiler)
         End If
     End Sub
+
+
+    'Cuando se pida informacion de una pelicula se accede a un form que muestra dicha informacion
     Private Sub imgVerDetalles_Click(sender As Object, e As EventArgs)
         Dim img As PictureBox = DirectCast(sender, PictureBox)
         Dim peliculaSeleccionada As Pelicula = DirectCast(img.Tag, Pelicula)
@@ -134,7 +172,6 @@
         Form3.Pelicula = peliculaSeleccionada
         Form3.Show()
     End Sub
-
 
     Private Sub imgVerDetalles_MouseEnter(sender As Object, e As EventArgs)
         Dim img As PictureBox = DirectCast(sender, PictureBox)
@@ -160,7 +197,7 @@
         End Get
     End Property
 
-    '4 metodos que sirven para crear distintas vistas
+    '4 metodos que sirven para crear distintos conroles
     Private Function CrearLabel(texto As String, ubicacion As Point, tamañoFuente As Integer, estiloFuente As FontStyle) As Label
         Return New Label With {
             .Text = texto,
@@ -169,7 +206,6 @@
             .Location = ubicacion
             }
     End Function
-
     Private Function CrearBoton(texto As String, ubicacion As Point) As Button
         Return New Button With {
             .Text = texto,
@@ -178,12 +214,10 @@
             .Location = ubicacion
             }
     End Function
-
     Private Sub CrearPanel(panel As Panel, size As Size, location As Point)
         panel.Size = size
         panel.Location = location
     End Sub
-
     Private Function CrearPictureBox(imagen As Image, size As Size, location As Point) As PictureBox
         Return New PictureBox With {
             .Size = size,

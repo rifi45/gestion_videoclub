@@ -40,3 +40,7 @@ C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windo
 C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windows\Moha_VideoClub.vbproj.ResolveComReference.cache
 C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windows\Moha_VideoClub.Form3.resources
 C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windows\Moha_VideoClub.UIAdministrador.resources
+C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windows\Moha_VideoClub.GestionPeliculas.resources
+C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windows\Moha_VideoClub.GestionSocios.resources
+C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windows\Moha_VideoClub.ConsultarPeliculas.resources
+C:\Users\mohap\source\repos\Moha_VideoClub\Moha_VideoClub\obj\Debug\net8.0-windows\Moha_VideoClub.Alquileres.resources
