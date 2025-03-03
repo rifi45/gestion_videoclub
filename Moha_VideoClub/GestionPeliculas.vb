@@ -190,7 +190,9 @@ Public Class GestionPeliculas
 
 
     Private Sub pBoxAtras_Click(sender As Object, e As EventArgs) Handles pBoxAtras.Click
+        LimpiarCampos()
         Me.Hide()
+        UIAdministrador.mensajeBienvenida()
         UIAdministrador.Show()
     End Sub
 

@@ -119,7 +119,6 @@ Module PanelSocio
     End Sub
 
 
-    'vvvv-------------ERROR LOGICO AQUI------------------vvvv
     'Metodo para recorrer y ver las peliculas seleccionadas si ya han sido alquiladas
     Private Sub recorrerPeliculas(gestion As String)
         If PeliculasSeleccionadas.Count > 0 Then
@@ -158,7 +157,6 @@ Module PanelSocio
             Dim fechaHoy As String = DateTime.Now.ToString("dd/MM/yyyy")
             Dim alquiler As New Alquiler(0, pelicula.Id, socioIniciado.Id, fechaHoy, "Alquilada", 1)
             socioIniciado.actualizarAlquileres()
-            MsgBox(socioIniciado.Alquileres.Count())
             ConexionDB.crearAlquiler(alquiler)
         End If
     End Sub

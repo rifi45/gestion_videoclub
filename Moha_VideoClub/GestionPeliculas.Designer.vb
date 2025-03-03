@@ -113,7 +113,6 @@ Partial Class GestionPeliculas
         ' 
         pBoxImagen.BackColor = SystemColors.ControlLight
         pBoxImagen.BorderStyle = BorderStyle.FixedSingle
-        pBoxImagen.Image = My.Resources.Resources.galeria_de_imagenes
         pBoxImagen.Location = New Point(255, 64)
         pBoxImagen.Name = "pBoxImagen"
         pBoxImagen.Size = New Size(117, 172)

@@ -62,7 +62,7 @@
     End Function
 
 
-    Private Sub LimpiarCampos()
+    Public Sub LimpiarCampos()
         txtIdSocio.Clear()
         txtNombre.Clear()
         txtUsuario.Clear()
@@ -73,6 +73,7 @@
 
     Private Sub pBoxAtras_Click(sender As Object, e As EventArgs) Handles pBoxAtras.Click
         Me.Hide()
+        UIAdministrador.mensajeBienvenida()
         UIAdministrador.Show()
     End Sub
 

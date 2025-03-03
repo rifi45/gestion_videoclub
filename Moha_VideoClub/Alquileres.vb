@@ -49,6 +49,7 @@
     End Function
     Private Sub pBoxAtras_Click(sender As Object, e As EventArgs) Handles pBoxAtras.Click
         Me.Hide()
+        UIAdministrador.UIAdministrador_Load(Nothing, Nothing)
         UIAdministrador.Show()
     End Sub
 

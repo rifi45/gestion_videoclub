@@ -335,15 +335,15 @@ Module ConexionDB
     Public Sub modificarPelicula(pelicula As Pelicula)
         Try
             Dim consulta As String = "UPDATE pelicula SET " +
-                                  "nombre = COALESCE(NULLIF(@nombre, ''), nombre), " +
-                                  "imagen = COALESCE(NULLIF(@imagen, ''), imagen), " +
-                                  "director = COALESCE(NULLIF(@director, ''), director), " +
-                                  "anio = COALESCE(NULLIF(@anio, -1), anio), " +
-                                  "genero = COALESCE(NULLIF(@genero, ''), genero), " +
-                                  "duracion = COALESCE(NULLIF(@duracion, -1), duracion), " +
-                                  "stock = COALESCE(NULLIF(@stock, -1), stock), " +
-                                  "video = COALESCE(NULLIF(@video, ''), video) " +
-                                  "WHERE id_pelicula = @id_pelicula"
+                              "nombre = COALESCE(NULLIF(@nombre, ''), nombre), " +
+                              "imagen = COALESCE(NULLIF(@imagen, ''), imagen), " +
+                              "director = COALESCE(NULLIF(@director, ''), director), " +
+                              "anio = COALESCE(NULLIF(@anio, -1), anio), " +
+                              "genero = COALESCE(NULLIF(@genero, ''), genero), " +
+                              "duracion = COALESCE(NULLIF(@duracion, -1), duracion), " +
+                              "stock = COALESCE(NULLIF(@stock, -1), stock), " +
+                              "video = COALESCE(NULLIF(@video, ''), video) " +
+                              "WHERE id_pelicula = @id_pelicula"
             Dim comando As New SQLiteCommand(consulta, ConexionDB.Conexion)
             comando.Parameters.AddWithValue("@id_pelicula", pelicula.Id)
             comando.Parameters.AddWithValue("@nombre", pelicula.Nombre)
@@ -461,14 +461,14 @@ Module ConexionDB
         End If
     End Function
     ' convertir imagen de la aplicacion para insertar a la base de datos como byte
-    Private Function ConvertirABytes(img As Image) As Byte()
-        If img IsNot Nothing Then
-            Using ms As New MemoryStream()
-                img.Save(ms, Imaging.ImageFormat.Png)
-                Return ms.ToArray()
-            End Using
-        Else
-            Return Nothing
-        End If
+    Public Function ConvertirABytes(img As Image) As Byte()
+        If img Is Nothing Then Return Nothing
+
+        Using ms As New MemoryStream()
+            ' Clonar la imagen antes de guardarla
+            Dim imagenClonada As Image = New Bitmap(img)
+            imagenClonada.Save(ms, Imaging.ImageFormat.Png)
+            Return ms.ToArray()
+        End Using
     End Function
 End Module

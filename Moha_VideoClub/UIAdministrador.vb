@@ -1,13 +1,15 @@
 ﻿Public Class UIAdministrador
     Public adminAccedido As Persona
+
     ' variable para controlar el acceso al form Alquileres
     Dim accederAlquileres As Integer = 0
-    Private Sub UIAdministrador_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Public Sub UIAdministrador_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         mensajeBienvenida()
     End Sub
 
     Private Sub SociosToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SociosToolStripMenuItem.Click
         Me.Hide()
+        GestionSocios.LimpiarCampos()
         GestionSocios.Show()
     End Sub
 
@@ -39,6 +41,8 @@
 
 
     Public Sub mensajeBienvenida()
+        panelBienvenida.Controls.Clear()
+
         'Crear y agregar los mensajes al panel
         panelBienvenida.Controls.Add(CrearLabel("Bienvenido " & adminAccedido.NombreCompleto, 80, 10, 14, FontStyle.Bold))
         panelBienvenida.Controls.Add(CrearLabel("Tenemos " & ConexionDB.obtenerPeliculas().Count & " Películas disponibles", 80, 50))

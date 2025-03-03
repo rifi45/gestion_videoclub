@@ -15,6 +15,10 @@ Public Class Form2
         lblNombre.Text = socioIniciado.NombreCompleto
         lblUser.Text = socioIniciado.Usuario
 
+        ' iniciar el proyecto en la parte de peliculas
+        fijarBtnColor(btnConsultarPelis)
+        iniciarPanel(listaPeliculas, "Peliculas")
+
         PanelSocio.socioIniciado = socioIniciado
 
         listaPeliculas = ConexionDB.obtenerPeliculas
